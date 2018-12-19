@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+ <head>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="d3sparql.js"></script>
+  <script>
+  function exec() {
+    /* Uncomment to see debug information in console */
+    // d3sparql.debug = true
+    var endpoint = d3.select("#endpoint").property("value")
+    var sparql = d3.select("#sparql").property("value")
+    d3sparql.query(endpoint, sparql, render)
+  }
+  function render(json) {
+    /* set options and call the d3spraql.xxxxx function in this library ... */
+    var config = {
+						"key1":   "person",       // SPARQL variable name for node1 (optional; default is the 1st variable)
+						"key2":   "person",       // SPARQL variable name for node2 (optional; default is the 2nd varibale)
+						"label1": "node1label",  // SPARQL variable name for the label of node1 (optional; default is the 3rd variable)
+						"label2": "node2label",  // SPARQL variable name for the label of node2 (optional; default is the 4th variable)
+						"value1": "node1value",  // SPARQL variable name for the value of node1 (optional; default is the 5th variable)
+						"value2": "node2value"   // SPARQL variable name for the value of node2 (optional; default is the 6th variable)
+					}
+    d3sparql.forcegraph(json, config)
+  }
+  </script>
+  <style>
+  <!-- customize CSS -->
+  </style>
+ </head>
+ <body onload="exec()">
+  <form style="display:none">
+   <input id="endpoint" value="http://dbpedia.org/sparql" type="text">
+   <textarea id="sparql">
+    PREFIX dbr:<http://dbpedia.org/resource/>
+	PREFIX dbo:<http://dbpedia.org/ontology/>
+	PREFIX dbp:<http://dbpedia.org/property/>
+
+    SELECT ?person ?x
+    WHERE { 
+	dbr:Socrates dbo:influenced ?person .
+	}
+   </textarea>
+  </form>
+  <div id="result"></div>
+ </body>
+</html>
